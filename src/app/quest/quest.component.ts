@@ -1,6 +1,6 @@
 import { NgFor } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { IQuestsData } from '../data/questsData';
+import { IQuestCollection } from '../data/questsData';
 
 @Component({
   selector: 'app-quest',
@@ -10,5 +10,5 @@ import { IQuestsData } from '../data/questsData';
   styleUrl: './quest.component.scss',
 })
 export class QuestComponent {
-  @Input() data!: IQuestsData;
+  @Input() data!: IQuestCollection;
 }

@@ -1,11 +1,20 @@
 .quest {
-  background-color: #dddddd;
-  border: 1px solid black;
+  align-items: center;
+  background-color: #7faf17;
   border-radius: 0.5rem;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  height: 100%;
+  justify-content: center;
   padding: 0.5rem;
+  transition: 0.4s background-color ease;
+
+  &:hover {
+    background-color: #c3de0c;
+    cursor: pointer;
+    transition: 0.4s background-color ease;
+  }
 }
 
 p {

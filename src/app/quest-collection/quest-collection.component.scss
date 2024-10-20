@@ -1,4 +1,10 @@
 .quests {
   display: flex;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quest {
+  height: 50px;
+  width: 150px;
 }

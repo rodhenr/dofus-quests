@@ -1,0 +1,30 @@
+.header {
+  align-items: center;
+  background-color: #242424;
+  color: #a8a8a8;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  height: 50px;
+  padding: 0 3rem;
+}
+
+.title {
+  font-size: 1.75rem;
+}
+
+.languages {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.language {
+  font-size: 1.25rem;
+  transition: 0.3s font-size ease;
+
+  &:hover {
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: 0.3s font-size ease;
+  }
+}
