@@ -1,7 +1,13 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IQuest, IQuestCollection, IQuestsData } from '../data/questsData';
-import { LocalStorageService } from '../services/local-storage.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ILanguage,
+  IQuest,
+  IQuestCollection,
+  IQuestsData,
+} from '../../data/questsData';
+import { LanguageService } from '../../services/language.service';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
   selector: 'app-quest-modal',
@@ -10,16 +16,30 @@ import { LocalStorageService } from '../services/local-storage.service';
   templateUrl: './quest-modal.component.html',
   styleUrl: './quest-modal.component.scss',
 })
-export class QuestModalComponent {
+export class QuestModalComponent implements OnInit {
   @Input() collectionData: IQuestCollection | null = null;
   @Input() level: number | null = null;
   @Input() isModalOpen = false;
   @Output() modalClosed = new EventEmitter<void>();
   questsData: IQuestsData | undefined = undefined;
   localStorageQuestIds: number[] = [];
+  currentLanguage: keyof ILanguage | null = null;
 
-  constructor(private localStorageService: LocalStorageService) {
+  constructor(
+    private localStorageService: LocalStorageService,
+    private languageService: LanguageService
+  ) {
     this.getLocalStorageQuestIds();
+  }
+
+  ngOnInit(): void {
+    this.languageService.currentLanguage$.subscribe(lang => {
+      this.currentLanguage = lang;
+    });
+  }
+
+  changeLanguage(lang: keyof ILanguage): void {
+    this.languageService.setLanguage(lang);
   }
 
   getLocalStorageQuestIds(): void {

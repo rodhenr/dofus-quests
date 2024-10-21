@@ -10,8 +10,8 @@
           <div
             *ngFor="let quest of collectionData.questsData"
             class="collection"
-            (click)="findQuestsByType(quest.type.pt)">
-            <p>{{ quest.type.pt }}</p>
+            (click)="findQuestsByType(quest.type[currentLanguage!])">
+            <p>{{ quest.type[currentLanguage!] }}</p>
           </div>
         </div>
         <div class="quest-container">
@@ -30,8 +30,10 @@
               <div
                 *ngFor="let quest of flatQuests(questsData.quests)"
                 class="quest">
-                <p (click)="openLink(quest.links.pt)" class="quest-name">
-                  {{ quest.name.pt }}
+                <p
+                  (click)="openLink(quest.links[currentLanguage!])"
+                  class="quest-name">
+                  {{ quest.name[currentLanguage!] }}
                 </p>
                 <p class="quest-level">Nível {{ quest.level }}</p>
                 <div class="quest-check">
@@ -47,9 +49,11 @@
                 <p>Sucesso</p>
                 <div
                   class="quest-success"
-                  (click)="openLink(questsData!.success.links.pt)">
+                  (click)="
+                    openLink(questsData!.success.links[currentLanguage!])
+                  ">
                   <p>
-                    {{ questsData!.success.name.pt }}
+                    {{ questsData!.success.name[currentLanguage!] }}
                   </p>
                   <img src="img/success-icon.jpg" alt="success icon" />
                 </div></div

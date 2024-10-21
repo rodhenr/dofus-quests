@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './header/header.component';
-import { QuestCollectionComponent } from './quest-collection/quest-collection.component';
-import { QuestComponent } from './quest/quest.component';
+import { HeaderComponent } from './components/header/header.component';
+import { QuestCollectionComponent } from './components/quest-collection/quest-collection.component';
+import { QuestComponent } from './components/quest/quest.component';
 
 @Component({
   selector: 'app-root',

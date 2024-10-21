@@ -1,6 +1,6 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
-import { IQuestCollection, questData } from '../data/questsData';
+import { IQuestCollection, questData } from '../../data/questsData';
 import { QuestModalComponent } from '../quest-modal/quest-modal.component';
 import { QuestComponent } from '../quest/quest.component';
 
