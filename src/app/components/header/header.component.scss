@@ -20,11 +20,12 @@
 
 .language {
   font-size: 1.25rem;
-  transition: 0.3s font-size ease;
 
   &:hover {
     cursor: pointer;
-    font-size: 1.5rem;
-    transition: 0.3s font-size ease;
   }
+}
+
+.grayscale {
+  filter: grayscale(100%);
 }

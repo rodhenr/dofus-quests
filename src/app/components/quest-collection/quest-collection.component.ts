@@ -1,6 +1,8 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
-import { IQuestCollection, questData } from '../../data/questsData';
+import { IQuestCollection } from '../../data/interfaces';
+import { questData } from '../../data/questsData';
+import { QuestDataService } from '../../services/quest-data/quest-data.service';
 import { QuestModalComponent } from '../quest-modal/quest-modal.component';
 import { QuestComponent } from '../quest/quest.component';
 
@@ -13,21 +15,16 @@ import { QuestComponent } from '../quest/quest.component';
 })
 export class QuestCollectionComponent {
   quests: IQuestCollection[] = questData;
-  selectedCollection: IQuestCollection | null = questData[0];
   isModalVisible = false;
+
+  constructor(private questDataService: QuestDataService) {}
+
+  onSelectCollection(id: number): void {
+    this.questDataService.setCollectionById(id);
+    this.isModalVisible = true;
+  }
 
   onModalClose(): void {
     this.isModalVisible = false;
-  }
-
-  selectCollection(id: number): void {
-    if (this.selectCollection !== null) {
-      const collection = this.quests!.find(x => x.id == id);
-
-      if (collection) {
-        this.selectedCollection = collection;
-        this.isModalVisible = true;
-      }
-    }
   }
 }

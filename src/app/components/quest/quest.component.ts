@@ -1,6 +1,6 @@
 import { NgFor } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { IQuestCollection } from '../../data/questsData';
+import { IQuestCollection } from '../../data/interfaces';
 
 @Component({
   selector: 'app-quest',

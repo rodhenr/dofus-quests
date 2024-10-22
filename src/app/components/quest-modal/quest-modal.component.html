@@ -2,7 +2,8 @@
   <div class="modal-backdrop" (click)="closeModal()"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <h2>Nível {{ level }}</h2>
+      <h2>Nível {{ collectionData?.level }}</h2>
+      <p>{{ completedQuests }}/{{ questCount }} missões completadas</p>
     </div>
     <div class="modal-body">
       <ng-container *ngIf="collectionData !== null">

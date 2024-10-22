@@ -1,15 +1,13 @@
 <div>
   <app-quest-modal
     [isModalOpen]="isModalVisible"
-    (modalClosed)="onModalClose()"
-    [collectionData]="selectedCollection"
-    [level]="selectedCollection?.level ?? null">
+    (modalClosed)="onModalClose()">
   </app-quest-modal>
   <div class="quests">
     <div *ngFor="let quest of quests" class="quest">
       <app-quest
         [data]="quest"
-        (click)="selectCollection(quest.id)"></app-quest>
+        (click)="onSelectCollection(quest.id)"></app-quest>
     </div>
   </div>
 </div>

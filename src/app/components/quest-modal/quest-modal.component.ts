@@ -5,9 +5,11 @@ import {
   IQuest,
   IQuestCollection,
   IQuestsData,
-} from '../../data/questsData';
-import { LanguageService } from '../../services/language.service';
-import { LocalStorageService } from '../../services/local-storage.service';
+} from '../../data/interfaces';
+import {} from '../../data/questsData';
+import { LanguageService } from '../../services/language/language.service';
+import { LocalStorageService } from '../../services/local-storage/local-storage.service';
+import { QuestDataService } from '../../services/quest-data/quest-data.service';
 
 @Component({
   selector: 'app-quest-modal',
@@ -17,48 +19,53 @@ import { LocalStorageService } from '../../services/local-storage.service';
   styleUrl: './quest-modal.component.scss',
 })
 export class QuestModalComponent implements OnInit {
-  @Input() collectionData: IQuestCollection | null = null;
-  @Input() level: number | null = null;
   @Input() isModalOpen = false;
   @Output() modalClosed = new EventEmitter<void>();
+  collectionData: IQuestCollection | null = null;
   questsData: IQuestsData | undefined = undefined;
-  localStorageQuestIds: number[] = [];
+  completedQuestsIds: number[] = [];
   currentLanguage: keyof ILanguage | null = null;
+  questCount = 0;
+  completedQuests = 0;
 
   constructor(
     private localStorageService: LocalStorageService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private questDataService: QuestDataService
   ) {
-    this.getLocalStorageQuestIds();
+    this.completedQuestsIds = this.localStorageService.getQuestIds() || [];
   }
 
   ngOnInit(): void {
+    this.questDataService.questCount$.subscribe(count => {
+      this.questCount = count;
+    });
+
+    this.questDataService.selectedCollection$.subscribe(c => {
+      this.collectionData = c;
+    });
+
     this.languageService.currentLanguage$.subscribe(lang => {
       this.currentLanguage = lang;
     });
-  }
 
-  changeLanguage(lang: keyof ILanguage): void {
-    this.languageService.setLanguage(lang);
-  }
-
-  getLocalStorageQuestIds(): void {
-    this.localStorageQuestIds = this.localStorageService.getQuestIds() || [];
+    this.localStorageService.savedIds$.subscribe(ids => {
+      this.completedQuestsIds = ids;
+      this.completedQuests =
+        this.completedQuestsIds.filter(x => ids.includes(x)).length ?? 0;
+    });
   }
 
   addQuestId(id: number): void {
-    this.localStorageQuestIds.push(id);
-    this.localStorageService.setQuestIds(this.localStorageQuestIds);
+    this.localStorageService.addQuestId(id);
   }
 
   removeQuestId(id: number): void {
-    this.localStorageQuestIds = this.localStorageQuestIds.filter(x => x !== id);
-    this.localStorageService.setQuestIds(this.localStorageQuestIds);
+    this.localStorageService.removeQuestId(id);
   }
 
   clearQuestIds(): void {
     this.localStorageService.clearQuestIds();
-    this.localStorageQuestIds = [];
   }
 
   closeModal(): void {
@@ -81,7 +88,7 @@ export class QuestModalComponent implements OnInit {
   }
 
   verifyQuestCompletation(id: number): boolean {
-    return this.localStorageQuestIds.includes(id);
+    return this.completedQuestsIds.includes(id);
   }
 
   onCheckboxChange(number: number, event: Event): void {
@@ -97,21 +104,23 @@ export class QuestModalComponent implements OnInit {
   verifyAllCompleteByType(): boolean {
     const ids = this.questsData?.quests.map(x => x.questId) ?? [];
 
-    return ids.every(x => this.localStorageQuestIds.includes(x));
+    return ids.every(x => this.completedQuestsIds.includes(x));
   }
 
   onAllCheckboxChange(event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
     const ids = this.questsData?.quests.map(x => x.questId) ?? [];
 
-    this.localStorageQuestIds = this.localStorageQuestIds.filter(
-      x => !ids?.includes(x)
+    const idsList = ids.filter(x =>
+      isChecked
+        ? !this.completedQuestsIds?.includes(x)
+        : this.completedQuestsIds?.includes(x)
     );
 
     if (isChecked) {
-      this.localStorageQuestIds = [...this.localStorageQuestIds, ...ids];
+      this.localStorageService.addQuestList(idsList);
+    } else {
+      this.localStorageService.removeQuestList(idsList);
     }
-
-    this.localStorageService.setQuestIds(this.localStorageQuestIds);
   }
 }
