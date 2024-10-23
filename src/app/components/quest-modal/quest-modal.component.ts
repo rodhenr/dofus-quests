@@ -1,14 +1,13 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { LanguageService } from '../../services/language/language.service';
+import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import {
   ILanguage,
   IQuest,
   IQuestCollection,
   IQuestsData,
-} from '../../data/interfaces';
-import {} from '../../data/questsData';
-import { LanguageService } from '../../services/language/language.service';
-import { LocalStorageService } from '../../services/local-storage/local-storage.service';
+} from '../../services/quest-data/quest-data.models';
 import { QuestDataService } from '../../services/quest-data/quest-data.service';
 
 @Component({
@@ -37,6 +36,8 @@ export class QuestModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.completedQuests = 0;
+
     this.questDataService.questCount$.subscribe(count => {
       this.questCount = count;
     });

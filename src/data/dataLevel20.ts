@@ -1,4 +1,4 @@
-import { IQuestCollection } from './interfaces';
+import { IQuestCollection } from '../app/services/quest-data/quest-data.models';
 
 export const dataLevel20: IQuestCollection = {
   id: 2,
