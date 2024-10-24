@@ -1,5 +1,6 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 import { LanguageService } from '../../services/language/language.service';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import {
@@ -13,7 +14,7 @@ import { QuestDataService } from '../../services/quest-data/quest-data.service';
 @Component({
   selector: 'app-quest-modal',
   standalone: true,
-  imports: [NgIf, NgFor, CommonModule],
+  imports: [NgIf, NgFor, CommonModule, MatIcon],
   templateUrl: './quest-modal.component.html',
   styleUrl: './quest-modal.component.scss',
 })
@@ -21,7 +22,7 @@ export class QuestModalComponent implements OnInit {
   @Input() isModalOpen = false;
   @Output() modalClosed = new EventEmitter<void>();
   collectionData: IQuestCollection | null = null;
-  questsData: IQuestsData | undefined = undefined;
+  questsData: IQuestsData | null = null;
   completedQuestsIds: number[] = [];
   currentLanguage: keyof ILanguage | null = null;
   questCount = 0;
@@ -32,7 +33,7 @@ export class QuestModalComponent implements OnInit {
     private languageService: LanguageService,
     private questDataService: QuestDataService
   ) {
-    this.completedQuestsIds = this.localStorageService.getQuestIds() || [];
+    this.completedQuestsIds = this.localStorageService.getQuestIds();
   }
 
   ngOnInit(): void {
@@ -44,6 +45,10 @@ export class QuestModalComponent implements OnInit {
 
     this.questDataService.selectedCollection$.subscribe(c => {
       this.collectionData = c;
+      this.questsData = null;
+      this.completedQuests = this.getCompletedQuestsNumber(
+        this.completedQuestsIds
+      );
     });
 
     this.languageService.currentLanguage$.subscribe(lang => {
@@ -52,8 +57,7 @@ export class QuestModalComponent implements OnInit {
 
     this.localStorageService.savedIds$.subscribe(ids => {
       this.completedQuestsIds = ids;
-      this.completedQuests =
-        this.completedQuestsIds.filter(x => ids.includes(x)).length ?? 0;
+      this.completedQuests = this.getCompletedQuestsNumber(ids);
     });
   }
 
@@ -63,6 +67,19 @@ export class QuestModalComponent implements OnInit {
 
   removeQuestId(id: number): void {
     this.localStorageService.removeQuestId(id);
+  }
+
+  getCompletedQuestsNumber(completedQuestsIds: number[]): number {
+    const selectedQuests =
+      this.collectionData?.questsData
+        .flat()
+        .map(x => x.quests)
+        .flat() ?? [];
+
+    return (
+      selectedQuests.filter(x => completedQuestsIds.includes(x.questId))
+        .length ?? 0
+    );
   }
 
   clearQuestIds(): void {
@@ -75,9 +92,8 @@ export class QuestModalComponent implements OnInit {
   }
 
   findQuestsByType(type: string): void {
-    this.questsData = this.collectionData?.questsData.find(
-      x => x.type.pt === type
-    );
+    this.questsData =
+      this.collectionData?.questsData.find(x => x.type.pt === type) ?? null;
   }
 
   openLink(url: string): void {
@@ -102,10 +118,20 @@ export class QuestModalComponent implements OnInit {
     }
   }
 
-  verifyAllCompleteByType(): boolean {
-    const ids = this.questsData?.quests.map(x => x.questId) ?? [];
+  verifyAllCompleteByType(type: ILanguage): boolean {
+    if (this.collectionData) {
+      const questsByType = this.collectionData?.questsData.find(
+        x => x.type === type
+      );
 
-    return ids.every(x => this.completedQuestsIds.includes(x));
+      if (questsByType) {
+        const ids = questsByType.quests.map(x => x.questId) ?? [];
+
+        return ids.every(x => this.completedQuestsIds.includes(x));
+      }
+    }
+
+    return false;
   }
 
   onAllCheckboxChange(event: Event): void {

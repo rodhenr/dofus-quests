@@ -15,7 +15,7 @@ export class LocalStorageService {
 
   getQuestIds(): number[] {
     const quests = localStorage.getItem(this.storageKey);
-    return quests ? JSON.parse(quests) : null;
+    return quests ? JSON.parse(quests) : [];
   }
 
   addQuestId(id: number): void {

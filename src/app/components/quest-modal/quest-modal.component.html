@@ -11,57 +11,73 @@
           <div
             *ngFor="let quest of collectionData.questsData"
             class="collection"
-            (click)="findQuestsByType(quest.type[currentLanguage!])">
+            (click)="findQuestsByType(quest.type[currentLanguage!])"
+            [ngClass]="
+              verifyAllCompleteByType(quest.type)
+                ? 'completed'
+                : 'not-completed'
+            ">
             <p>{{ quest.type[currentLanguage!] }}</p>
           </div>
         </div>
         <div class="quest-container">
-          <ng-container *ngIf="questsData">
-            <div class="quests">
-              <div class="quest-header">
-                <div class="quest-name"><p>Missão</p></div>
-                <div class="quest-level"><p>Nível</p></div>
-                <div class="all-checkbox">
-                  <input
-                    type="checkbox"
-                    [checked]="verifyAllCompleteByType()"
-                    (change)="onAllCheckboxChange($event)" />
+          <ng-container *ngIf="questsData; else noContent">
+            <ng-container *ngIf="questsData.quests.length > 0; else noData">
+              <div class="quests">
+                <div class="quest-header">
+                  <div class="all-checkbox">
+                    <input
+                      type="checkbox"
+                      [checked]="verifyAllCompleteByType(questsData.type)"
+                      (change)="onAllCheckboxChange($event)" />
+                  </div>
                 </div>
-              </div>
-              <div
-                *ngFor="let quest of flatQuests(questsData.quests)"
-                class="quest">
-                <p
-                  (click)="openLink(quest.links[currentLanguage!])"
-                  class="quest-name">
-                  {{ quest.name[currentLanguage!] }}
-                </p>
-                <p class="quest-level">Nível {{ quest.level }}</p>
-                <div class="quest-check">
-                  <input
-                    type="checkbox"
-                    [checked]="verifyQuestCompletation(quest.questId)"
-                    (change)="onCheckboxChange(quest.questId, $event)" />
-                </div>
-              </div>
-            </div>
-            <ng-container *ngIf="questsData">
-              <div>
-                <p>Sucesso</p>
                 <div
-                  class="quest-success"
-                  (click)="
-                    openLink(questsData!.success.links[currentLanguage!])
-                  ">
-                  <p>
-                    {{ questsData!.success.name[currentLanguage!] }}
+                  *ngFor="let quest of flatQuests(questsData.quests)"
+                  class="quest">
+                  <p
+                    (click)="openLink(quest.links[currentLanguage!])"
+                    class="quest-name">
+                    {{ quest.name[currentLanguage!] }} (Nível {{ quest.level }})
                   </p>
-                  <img src="img/success-icon.jpg" alt="success icon" />
-                </div></div
-            ></ng-container>
+                  <div class="quest-check">
+                    <input
+                      type="checkbox"
+                      [checked]="verifyQuestCompletation(quest.questId)"
+                      (change)="onCheckboxChange(quest.questId, $event)" />
+                  </div>
+                </div>
+              </div>
+              <ng-container *ngIf="questsData">
+                <div>
+                  <p>Sucesso</p>
+                  <div
+                    class="quest-success"
+                    (click)="
+                      openLink(questsData!.success.links[currentLanguage!])
+                    ">
+                    <p>
+                      {{ questsData!.success.name[currentLanguage!] }}
+                    </p>
+                    <img src="img/success-icon.jpg" alt="success icon" />
+                  </div></div
+              ></ng-container>
+            </ng-container>
           </ng-container>
         </div>
       </ng-container>
+
+      <ng-template #noContent>
+        <div class="no-content">
+          <p>Nenhum tipo selecionado</p>
+        </div>
+      </ng-template>
+
+      <ng-template #noData>
+        <div class="no-content">
+          <p>Sem dados para exibir</p>
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>
