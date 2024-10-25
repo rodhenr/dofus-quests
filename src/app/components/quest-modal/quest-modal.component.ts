@@ -1,6 +1,7 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
+import { TranslatePipe } from '../../pipes/translate/translate.pipe';
 import { LanguageService } from '../../services/language/language.service';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import {
@@ -14,7 +15,7 @@ import { QuestDataService } from '../../services/quest-data/quest-data.service';
 @Component({
   selector: 'app-quest-modal',
   standalone: true,
-  imports: [NgIf, NgFor, CommonModule, MatIcon],
+  imports: [NgIf, NgFor, CommonModule, MatIcon, TranslatePipe],
   templateUrl: './quest-modal.component.html',
   styleUrl: './quest-modal.component.scss',
 })

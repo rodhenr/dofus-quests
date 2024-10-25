@@ -2,8 +2,11 @@
   <div class="modal-backdrop" (click)="closeModal()"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <h2>Nível {{ collectionData?.level }}</h2>
-      <p>{{ completedQuests }}/{{ questCount }} missões completadas</p>
+      <h2>{{ 'level' | translate | async }} {{ collectionData?.level }}</h2>
+      <p>
+        {{ completedQuests }}/{{ questCount }}
+        {{ 'completedQuests' | translate | async }}
+      </p>
     </div>
     <div class="modal-body">
       <ng-container *ngIf="collectionData !== null">
@@ -50,7 +53,7 @@
               </div>
               <ng-container *ngIf="questsData">
                 <div>
-                  <p>Sucesso</p>
+                  <p>{{ 'success' | translate | async }}</p>
                   <div
                     class="quest-success"
                     (click)="
@@ -69,13 +72,13 @@
 
       <ng-template #noContent>
         <div class="no-content">
-          <p>Nenhum tipo selecionado</p>
+          <p>{{ 'noType' | translate | async }}</p>
         </div>
       </ng-template>
 
       <ng-template #noData>
         <div class="no-content">
-          <p>Sem dados para exibir</p>
+          <p>{{ 'noData' | translate | async }}</p>
         </div>
       </ng-template>
     </div>
