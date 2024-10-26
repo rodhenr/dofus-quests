@@ -7,7 +7,7 @@ export interface IQuestCollection {
 export interface IQuestsData {
   type: ILanguage;
   quests: IQuest[];
-  success: ISuccess;
+  success: ISuccess | null;
 }
 
 export interface IQuest {

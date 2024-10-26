@@ -23,6 +23,9 @@
                 : 'not-completed'
             ">
             <p>{{ quest.type[currentLanguage!] }}</p>
+            <div>
+              <p>{{ findQuestTypeLevels(quest.type[currentLanguage!]) }}</p>
+            </div>
           </div>
         </div>
         <div class="quest-container">
@@ -56,7 +59,11 @@
                   <p>{{ 'success' | translate | async }}</p>
                   <div class="quest-success">
                     <p>
-                      {{ questsData!.success.name[currentLanguage!] }}
+                      {{
+                        questsData.success === null
+                          ? ''
+                          : questsData.success.name[currentLanguage!]
+                      }}
                     </p>
                     <img src="img/success-icon.jpg" alt="success icon" />
                   </div></div

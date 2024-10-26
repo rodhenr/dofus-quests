@@ -94,7 +94,22 @@ export class QuestModalComponent implements OnInit {
 
   findQuestsByType(type: string): void {
     this.questsData =
-      this.collectionData?.questsData.find(x => x.type.pt === type) ?? null;
+      this.collectionData?.questsData.find(
+        x => x.type[this.currentLanguage!] === type
+      ) ?? null;
+  }
+
+  findQuestTypeLevels(type: string): string | null {
+    const questData =
+      this.collectionData?.questsData.find(
+        x => x.type[this.currentLanguage!] === type
+      ) ?? null;
+
+    const levels = questData?.quests.map(x => x.level) ?? [];
+
+    return levels.length == 0
+      ? null
+      : `(${Math.min(...levels)} - ${Math.max(...levels)})`;
   }
 
   openQuestLink(questId: number): void {
