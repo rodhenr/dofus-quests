@@ -2,7 +2,9 @@
   <div class="modal-backdrop" (click)="closeModal()"></div>
   <div class="modal-content">
     <div class="modal-header">
-      <h2>{{ 'level' | translate | async }} {{ collectionData?.level }}</h2>
+      <h2>
+        {{ 'level' | translate | async }} {{ collectionData?.levelRange }}
+      </h2>
       <p>
         {{ completedQuests }}/{{ questCount }}
         {{ 'completedQuests' | translate | async }}
@@ -38,9 +40,7 @@
                 <div
                   *ngFor="let quest of flatQuests(questsData.quests)"
                   class="quest">
-                  <p
-                    (click)="openLink(quest.links[currentLanguage!])"
-                    class="quest-name">
+                  <p (click)="openQuestLink(quest.questId)" class="quest-name">
                     {{ quest.name[currentLanguage!] }} (Nível {{ quest.level }})
                   </p>
                   <div class="quest-check">
@@ -54,11 +54,7 @@
               <ng-container *ngIf="questsData">
                 <div>
                   <p>{{ 'success' | translate | async }}</p>
-                  <div
-                    class="quest-success"
-                    (click)="
-                      openLink(questsData!.success.links[currentLanguage!])
-                    ">
+                  <div class="quest-success">
                     <p>
                       {{ questsData!.success.name[currentLanguage!] }}
                     </p>

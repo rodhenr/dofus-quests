@@ -5,7 +5,7 @@ import { IQuestCollection } from './quest-data.models';
 
 export interface IQuestsHome {
   id: number;
-  level: number;
+  levelRange: string;
 }
 
 @Injectable({
@@ -46,7 +46,7 @@ export class QuestDataService {
 
   getQuestsInfo(): IQuestsHome[] {
     return questsDataCollection.map(x => {
-      return { id: x.id, level: x.level };
+      return { id: x.id, levelRange: x.levelRange };
     });
   }
 }

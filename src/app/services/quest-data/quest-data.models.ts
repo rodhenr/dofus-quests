@@ -1,6 +1,6 @@
 export interface IQuestCollection {
   id: number;
-  level: number;
+  levelRange: string;
   questsData: IQuestsData[];
 }
 
@@ -13,14 +13,12 @@ export interface IQuestsData {
 export interface IQuest {
   questId: number;
   name: ILanguage;
-  links: ILanguage;
   level: number;
   isRepeatable: boolean;
 }
 
 export interface ISuccess {
   name: ILanguage;
-  links: ILanguage;
 }
 
 export interface ILanguage {

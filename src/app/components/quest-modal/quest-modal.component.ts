@@ -97,7 +97,8 @@ export class QuestModalComponent implements OnInit {
       this.collectionData?.questsData.find(x => x.type.pt === type) ?? null;
   }
 
-  openLink(url: string): void {
+  openQuestLink(questId: number): void {
+    const url = `https://dofusdb.fr/${this.currentLanguage}/database/quest/${questId}`;
     window.open(url, '_blank');
   }
 
